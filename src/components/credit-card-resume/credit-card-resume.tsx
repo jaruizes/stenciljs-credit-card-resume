@@ -1,4 +1,4 @@
-import { Component, getAssetPath, h, Prop, Event } from '@stencil/core';
+import { Component, getAssetPath, h, Prop } from '@stencil/core';
 
 @Component({
   tag: 'credit-card-resume',
@@ -9,24 +9,14 @@ import { Component, getAssetPath, h, Prop, Event } from '@stencil/core';
 export class CreditCardResume {
 
   /**
-   * Card onwer's name
-   */
-  @Prop() name: string;
-
-  /**
    * Card number
    */
   @Prop() number: string;
 
   /**
-   * Card logo
+   * Card limit
    */
-  @Prop() logo: string;
-
-  /**
-   * Card expiration
-   */
-  @Prop() expiration: string;
+  @Prop() limit: number;
 
   /**
    * Card type
@@ -41,64 +31,77 @@ export class CreditCardResume {
   /**
    * Card amount
    */
-  @Prop() amount: string;
+  @Prop() amount: number;
 
-  /**
-   * Card amount progress
-   */
-  @Prop() progress: string;
+  isCredit() {
+    return this.type === 1;
+  }
 
-  /**
-   * @Event
-   * Click event
-   */
-  @Event({eventName: 'cardClick'}) clickEvent;
+  getProgress() {
+    return (this.amount * 100) / this.limit;
+  }
 
-  click() {
-    this.clickEvent.emit({
-      name: this.name,
-      number: this.number
-    });
+  formatCardNumber(): string {
+    const formated = this.number.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+
+    console.log('Formated: ' + formated);
+    return formated;
   }
 
   render() {
 
     let cardImg: string = getAssetPath('./assets/debit-card.png');
     let cardType: string = "DEBIT CARD";
-    if (this.type === 1) {
+    if (this.isCredit()) {
       cardImg = getAssetPath('./assets/credit-card.png');
       cardType = "CREDIT CARD";
     }
 
     return (
-      <div class="card border-success mb-3 card-container" >
-        <a href="#" class="stretched-link" onClick={ () => this.click()}></a>
-        <div class="row no-gutters h-100">
-          <div class="col d-none d-sm-block d-sm-none d-lg-block d-md-block my-auto ">
-            <div class="justify-content-center">
-              <img src={cardImg} class="img-fluid card-img" ></img>
-            </div>
-          </div>
-          <div class="col-md-10 col-xs-12 col-sm-12 justify-content-start">
-            <div class="card-body">
-              <div class="row no-gutters">
-                <div class="col-8 align-bottom">
-                  <div class="justify-content-start">
-                    <p class="card-name">{this.number}</p>
-                    <p class="card-number">{cardType}</p>
-                    <p>
-                      <small class="card-last-movement">Last movement: {this.lastmovement}</small>
-                    </p>
+      <div class="container-fluid card-main-container">
+        <div class="row">
+          <div class="col-12 mt-3">
+            <div class="card">
+              <div class="card-horizontal">
+                <div class="img-square-wrapper align-middle">
+                  <img class="card-img" src={cardImg} alt="Card image cap"/>
+                </div>
+                <div class="card-body">
+                  <div class="container-fluid">
+                    <div class="row">
+                      <div class="col-10 col-sm-8 justify-content-start">
+                        <h4 class="card-title">{this.formatCardNumber()}</h4>
+                        <p class="text-muted">{cardType}</p>
+                      </div>
+                      <div class="col-2 col-sm-4 justify-content-end">
+                        <div class="row justify-content-end">
+                          <p class="card-amount">{this.amount}€</p>
+                        </div>
+                          { this.isCredit() ?
+                            <div class="progress-bar-container">
+                              <div class="progress" style={{height: "0.8em"}}>
+                                <div class="progress-bar bg-danger" role="progressbar" style={{width: `${this.getProgress()}%`}} aria-valuenow={this.getProgress()} aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <div class="d-flex justify-content-end" style={{"padding-top": "0.2em"}}>
+                                <small class="text-muted font-italic">Credit limit: {this.limit} €</small>
+                              </div>
+                            </div>
+                            : <div></div>
+                          }
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-4 align-bottom">
-                  <div class="d-flex justify-content-end">
-                    <p class="card-amount">{this.amount}</p>
-                  </div>
-                  <div class="progress">
-                    <div class="progress-bar bg-danger" role="progressbar" style={{width: `${this.progress}%`}} aria-valuenow={this.progress} aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div class="card-footer">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-8">
+                      <small class="text-muted font-weight-bold">Last movement: {this.lastmovement}</small>
+                    </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>

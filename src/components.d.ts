@@ -10,31 +10,19 @@ export namespace Components {
         /**
           * Card amount
          */
-        "amount": string;
-        /**
-          * Card expiration
-         */
-        "expiration": string;
+        "amount": number;
         /**
           * Card last movement
          */
         "lastmovement": string;
         /**
-          * Card logo
+          * Card limit
          */
-        "logo": string;
-        /**
-          * Card onwer's name
-         */
-        "name": string;
+        "limit": number;
         /**
           * Card number
          */
         "number": string;
-        /**
-          * Card amount progress
-         */
-        "progress": string;
         /**
           * Card type
          */
@@ -57,35 +45,19 @@ declare namespace LocalJSX {
         /**
           * Card amount
          */
-        "amount"?: string;
-        /**
-          * Card expiration
-         */
-        "expiration"?: string;
+        "amount"?: number;
         /**
           * Card last movement
          */
         "lastmovement"?: string;
         /**
-          * Card logo
+          * Card limit
          */
-        "logo"?: string;
-        /**
-          * Card onwer's name
-         */
-        "name"?: string;
+        "limit"?: number;
         /**
           * Card number
          */
         "number"?: string;
-        /**
-          * @Event Click event
-         */
-        "onCardClick"?: (event: CustomEvent<any>) => void;
-        /**
-          * Card amount progress
-         */
-        "progress"?: string;
         /**
           * Card type
          */
